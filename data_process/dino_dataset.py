@@ -47,8 +47,11 @@ class MCBase(Dataset):
             if self.transform is not None:
                 img = self.transform(img)
             return img, label
-        except UnidentifiedImageError as e:
+        except PIL.UnidentifiedImageError as e:
             print(f"Error loading image at index {index}: {e}")
+            return None, None
+        except Exception as e:
+            print(f"An unexpected error occurred at index {index}: {e}")
             return None, None
 
     def get_img_info(self, data_dir):
