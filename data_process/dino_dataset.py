@@ -31,8 +31,6 @@ QUANTILES = {
 
 # J
 class MCBase(Dataset):
-    class_to_idx = {}
-
     def __init__(self, root, bands=None, transform=None):
         super().__init__()
         self.root = Path(root)
@@ -40,34 +38,17 @@ class MCBase(Dataset):
         self.transform = transform
         self.dataset = self.get_img_info(root)
 
-    def __getitem__(self, index):
-        path, label = self.dataset[index]
-        try:
-            img = read_image(path, self.bands, QUANTILES)
-            if self.transform is not None:
-                img = self.transform(img)
-            return img, label
-        except PIL.UnidentifiedImageError as e:
-            print(f"Error loading image at index {index}: {e}")
-            return None, None
-        except Exception as e:
-            print(f"An unexpected error occurred at index {index}: {e}")
-            return None, None
-
-    def get_img_info(self, data_dir):
+    @staticmethod
+    def get_img_info(data_dir):
         data_info = list()
         dirs = os.listdir(data_dir)
-        for idx, sub_dir in enumerate(dirs):
+        for sub_dir in dirs:
             img_names = os.listdir(os.path.join(data_dir, sub_dir))
             img_names = list(filter(lambda x: x.endswith('.tif'), img_names))
-            if len(img_names) > 0:
-                img = np.random.choice(img_names, 1)
-                path_img = os.path.join(data_dir, sub_dir, img[0])
-                data_info.append((path_img, idx))
-                MCBase.class_to_idx[sub_dir] = idx  # Utiliza MCBase en lugar de self
+            img = np.random.choice(img_names, 1)
+            path_img = os.path.join(data_dir, sub_dir, img[0])
+            data_info.append((path_img, int(sub_dir)))
         return data_info
-
-
 
     @staticmethod
     def get_samples(self):
