@@ -32,7 +32,7 @@ QUANTILES = {
 # J
 class MCBase(Dataset):
     class_to_idx = {}
-    
+
     def __init__(self, root, bands=None, transform=None):
         super().__init__()
         self.root = Path(root)
@@ -40,8 +40,7 @@ class MCBase(Dataset):
         self.transform = transform
         self.dataset = self.get_img_info(root)
 
-    @staticmethod
-    def get_img_info(data_dir):
+    def get_img_info(self, data_dir):
         data_info = list()
         dirs = os.listdir(data_dir)
         for idx, sub_dir in enumerate(dirs):
@@ -51,8 +50,9 @@ class MCBase(Dataset):
                 img = np.random.choice(img_names, 1)
                 path_img = os.path.join(data_dir, sub_dir, img[0])
                 data_info.append((path_img, idx))
-                self.class_to_idx[sub_dir] = idx
+                MCBase.class_to_idx[sub_dir] = idx  # Utiliza MCBase en lugar de self
         return data_info
+
 
     @staticmethod
     def get_samples(self):
