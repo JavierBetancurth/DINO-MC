@@ -40,6 +40,17 @@ class MCBase(Dataset):
         self.transform = transform
         self.dataset = self.get_img_info(root)
 
+    def __getitem__(self, index):
+        path, label = self.dataset[index]
+        try:
+            img = read_image(path, self.bands, QUANTILES)
+            if self.transform is not None:
+                img = self.transform(img)
+            return img, label
+        except UnidentifiedImageError as e:
+            print(f"Error loading image at index {index}: {e}")
+            return None, None
+
     def get_img_info(self, data_dir):
         data_info = list()
         dirs = os.listdir(data_dir)
@@ -52,6 +63,7 @@ class MCBase(Dataset):
                 data_info.append((path_img, idx))
                 MCBase.class_to_idx[sub_dir] = idx  # Utiliza MCBase en lugar de self
         return data_info
+
 
 
     @staticmethod
