@@ -29,7 +29,10 @@ QUANTILES = {
     }
 }
 
+# J
 class MCBase(Dataset):
+    class_to_idx = {}
+    
     def __init__(self, root, bands=None, transform=None):
         super().__init__()
         self.root = Path(root)
@@ -41,12 +44,14 @@ class MCBase(Dataset):
     def get_img_info(data_dir):
         data_info = list()
         dirs = os.listdir(data_dir)
-        for sub_dir in dirs:
+        for idx, sub_dir in enumerate(dirs):
             img_names = os.listdir(os.path.join(data_dir, sub_dir))
             img_names = list(filter(lambda x: x.endswith('.tif'), img_names))
-            img = np.random.choice(img_names, 1)
-            path_img = os.path.join(data_dir, sub_dir, img[0])
-            data_info.append((path_img, int(sub_dir)))
+            if len(img_names) > 0:
+                img = np.random.choice(img_names, 1)
+                path_img = os.path.join(data_dir, sub_dir, img[0])
+                data_info.append((path_img, idx))
+                self.class_to_idx[sub_dir] = idx
         return data_info
 
     @staticmethod
