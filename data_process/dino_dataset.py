@@ -112,9 +112,16 @@ class MCTemporal(Dataset):
     def __len__(self):
         return len(self.samples)
     
+    #def __getitem__(self, index):
+        #root = os.path.join(self.root, self.samples[index])
+        #label = int(root.split('/')[-1])
+
     def __getitem__(self, index):
         root = os.path.join(self.root, self.samples[index])
-        label = int(root.split('/')[-1])
+        class_name = root.split('/')[-1]
+        label = self.label_map.get(class_name, -1)  # Asignar un valor predeterminado si la etiqueta no se encuentra
+        if label == -1:
+            raise ValueError(f"Clase desconocida: {class_name}")
         img_names = sorted(list(filter(lambda x: x.endswith('.tif'), os.listdir(root))), reverse=True)
         t0, t1, t2 = [read_image(os.path.join(root,path), self.bands, QUANTILES) for path in np.random.choice(img_names, 3)]
 
