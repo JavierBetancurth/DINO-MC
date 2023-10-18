@@ -88,12 +88,13 @@ def read_image(path, bands, quantiles=None):
     return img
 
 class MCTemporal(Dataset):
-    def __init__(self, root, bands='RGB_BANDS', transform=None):
+    def __init__(self, root, bands='RGB_BANDS', transform=None, label_map=None):
         super().__init__()
         self.root = Path(root)
         self.bands = bands if bands is not None else 'RGB_BANDS'
         self.transform = transform
         self.samples = self.get_samples(self.root)
+        self.label_map = label_map
 
     augment = transforms.Compose([
         transforms.RandomApply([
