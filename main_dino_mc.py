@@ -159,9 +159,7 @@ def train_dino(args):
     cudnn.benchmark = True
 
     # ============ preparing data ... ============
-    label_map = {"AnnualCrop": 0, "Forest": 1, "HerbaceousVegetation": 2, 
-                 "Highway": 3, "Industrial": 4, "Pasture": 5, "PermanentCrop": 6, "Residential": 7, 
-                 "River": 8, "SeaLake": 9}
+   
     # load dataset
     if args.data_mode == 'mc':
         print('dino-mc')
@@ -191,8 +189,7 @@ def train_dino(args):
         dataset = MCTemporal(
             root = args.data_path,
             bands = args.bands,
-            transform = transform,
-            label_map=label_map
+            transform = transform
         )
     sampler = torch.utils.data.DistributedSampler(dataset, shuffle=True)
     data_loader = torch.utils.data.DataLoader(
