@@ -191,7 +191,8 @@ def train_dino(args):
         dataset = MCTemporal(
             root = args.data_path,
             bands = args.bands,
-            transform = transform
+            transform = transform,
+            label_map=label_map
         )
     sampler = torch.utils.data.DistributedSampler(dataset, shuffle=True)
     data_loader = torch.utils.data.DataLoader(
