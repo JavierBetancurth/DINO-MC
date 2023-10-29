@@ -53,7 +53,8 @@ class MCBase(Dataset):
     @staticmethod
     def get_samples(self):
         dataset = list(self.root.glob('*/*'))
-        dataset = list(filter(lambda x: x.endswith('.tif'), dataset))
+        # dataset = list(filter(lambda x: x.endswith('.tif'), dataset))
+        dataset = list(filter(lambda x: x.endswith('.tif') or x.endswith('.jpg'), dataset))
         return dataset
     
     def __getitem__(self, index):
