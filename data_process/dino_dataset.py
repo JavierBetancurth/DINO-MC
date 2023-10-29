@@ -43,7 +43,7 @@ class MCBase(Dataset):
         dirs = os.listdir(data_dir)
         for sub_dir in dirs:
             img_names = os.listdir(os.path.join(data_dir, sub_dir))
-            img_names = list(filter(lambda x: x.endswith('.tif'), img_names))
+            img_names = list(filter(lambda x: x.endswith('.tif', '.jpg'), img_names))
             img = np.random.choice(img_names, 1)
             path_img = os.path.join(data_dir, sub_dir, img[0])
             data_info.append((path_img, int(sub_dir)))
