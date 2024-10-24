@@ -58,7 +58,7 @@ def land_use_classify(args):
         pth_transforms.Resize(256, interpolation=3),
         pth_transforms.CenterCrop(224),
         pth_transforms.ToTensor(),
-        pth_transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
+        pth_transforms.Normalize((0.3441, 0.3801, 0.4076), (0.2023, 0.1366, 0.1153)), # Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
     ])
     dataset_val = datasets.ImageFolder(os.path.join(args.data_path, "eval"), transform=val_transform)
     val_loader = torch.utils.data.DataLoader(
@@ -85,7 +85,7 @@ def land_use_classify(args):
         pth_transforms.RandomResizedCrop(224),
         pth_transforms.RandomHorizontalFlip(),
         pth_transforms.ToTensor(),
-        pth_transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
+        pth_transforms.Normalize((0.3441, 0.3801, 0.4076), (0.2023, 0.1366, 0.1153)),
     ])
     dataset_train = datasets.ImageFolder(os.path.join(args.data_path, "train"), transform=train_transform)
     sampler = torch.utils.data.distributed.DistributedSampler(dataset_train)
